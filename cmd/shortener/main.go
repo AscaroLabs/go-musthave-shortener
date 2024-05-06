@@ -7,7 +7,7 @@ import (
 
 func main() {
 	mux := rest.NewMux()
-	if err := mux.ListenAndServe(config.HTTP_PORT); err != nil {
+	if err := mux.ListenAndServe(config.HTTPPort); err != nil {
 		panic(err)
 	}
 }

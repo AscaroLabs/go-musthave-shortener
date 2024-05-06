@@ -33,7 +33,7 @@ func (h *linkHandler) Link(w http.ResponseWriter, req *http.Request) {
 }
 
 func (h *linkHandler) Short(w http.ResponseWriter, req *http.Request) {
-	originalURL, err := getUrlFromBody(req.Body)
+	originalURL, err := getURLFromBody(req.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -67,7 +67,7 @@ func (h *linkHandler) RedirectOriginal(w http.ResponseWriter, req *http.Request)
 	writeRedirectOriginalResponse(*res, w)
 }
 
-func getUrlFromBody(body io.Reader) (string, error) {
+func getURLFromBody(body io.Reader) (string, error) {
 	bodyBytes, err := io.ReadAll(body)
 	if err != nil {
 		return "", fmt.Errorf("failed to get url: %w", err)
