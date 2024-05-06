@@ -81,9 +81,9 @@ func getUrlFromBody(body io.Reader) (string, error) {
 }
 
 func writeShortResponse(res domain.ShortResponse, w http.ResponseWriter) {
+	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(res.ShortURL))
 	w.Header().Add("Content-Type", "text/plain")
-	w.WriteHeader(http.StatusCreated)
 }
 
 func writeRedirectOriginalResponse(res domain.GetOriginalResponse, w http.ResponseWriter) {
