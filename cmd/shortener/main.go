@@ -6,8 +6,11 @@ import (
 )
 
 func main() {
-	mux := rest.NewMux()
-	if err := mux.ListenAndServe(config.HTTPPort); err != nil {
+	linkHandler := rest.NewLinkHandler()
+	r := rest.NewRouter(
+		linkHandler,
+	)
+	if err := r.Router().Run(config.HTTPHost + config.HTTPPort); err != nil {
 		panic(err)
 	}
 }
