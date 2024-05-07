@@ -48,7 +48,7 @@ func (ls *LinkService) GetOriginal(req domain.GetOriginalRequest) (*domain.GetOr
 }
 
 func urlByID(id string) string {
-	return fmt.Sprintf("%s://%s%s/%s", config.NetProtocol, config.HTTPHost, config.HTTPPort, id)
+	return *config.Base + "/" + id
 }
 func generateID() string {
 	return utils.RandomString(config.IDLength)
