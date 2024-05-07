@@ -19,13 +19,13 @@ var mIDURL = map[string]string{}
 
 var h = rest.NewLinkHandler()
 
-func Test_linkHandler_Link(t *testing.T) {
-	t.Run("Test Short", test_linkHandler_Short)
+func TestLinkHandlerLink(t *testing.T) {
+	t.Run("Test Short", testLinkHandlerShort)
 
-	t.Run("Test RedirectOriginal", test_linkHandler_RedirectOriginal)
+	t.Run("Test RedirectOriginal", testLinkHandlerRedirectOriginal)
 }
 
-func test_linkHandler_Short(t *testing.T) {
+func testLinkHandlerShort(t *testing.T) {
 	type want struct {
 		code        int
 		contentType string
@@ -140,7 +140,7 @@ func test_linkHandler_Short(t *testing.T) {
 	}
 }
 
-func test_linkHandler_RedirectOriginal(t *testing.T) {
+func testLinkHandlerRedirectOriginal(t *testing.T) {
 	type want struct {
 		code     int
 		location string
@@ -188,6 +188,8 @@ func test_linkHandler_RedirectOriginal(t *testing.T) {
 			h.RedirectOriginal(w, request)
 
 			res := w.Result()
+			defer res.Body.Close()
+
 			assert.Equal(t, tt.want.code, res.StatusCode)
 			assert.Equal(t, tt.want.location, res.Header.Get("Location"))
 		})
