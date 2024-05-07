@@ -77,19 +77,6 @@ func testLinkHandlerShort(t *testing.T) {
 			},
 		},
 		{
-			name:        "positive test #4",
-			requestBody: "youtube.com",
-			want: want{
-				code:        http.StatusCreated,
-				contentType: "text/plain",
-				response: regexp.MustCompile(
-					config.NetProtocol + "://" +
-						config.HTTPHost + config.HTTPPort +
-						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.IDLength)),
-				saveResult: true,
-			},
-		},
-		{
 			name:        "negative test #1 (empty body)",
 			requestBody: "",
 			want: want{
@@ -110,6 +97,15 @@ func testLinkHandlerShort(t *testing.T) {
 		{
 			name:        "negative test #3 (bad URL)",
 			requestBody: "/a/b/c",
+			want: want{
+				code:        http.StatusBadRequest,
+				contentType: "",
+				response:    regexp.MustCompile(""),
+			},
+		},
+		{ // Иначе будет редирект на http://127.0.0.1/youtube.com
+			name:        "negative test #4",
+			requestBody: "youtube.com",
 			want: want{
 				code:        http.StatusBadRequest,
 				contentType: "",

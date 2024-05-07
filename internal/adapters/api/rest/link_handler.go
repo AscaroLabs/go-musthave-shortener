@@ -21,16 +21,16 @@ func NewLinkHandler() *linkHandler {
 	}
 }
 
-func (h *linkHandler) Link(w http.ResponseWriter, req *http.Request) {
-	switch req.Method {
-	case http.MethodPost:
-		h.Short(w, req)
-	case http.MethodGet:
-		h.RedirectOriginal(w, req)
-	default:
-		w.WriteHeader(http.StatusNotFound)
-	}
-}
+// func (h *linkHandler) Link(w http.ResponseWriter, req *http.Request) {
+// 	switch req.Method {
+// 	case http.MethodPost:
+// 		h.Short(w, req)
+// 	case http.MethodGet:
+// 		h.RedirectOriginal(w, req)
+// 	default:
+// 		w.WriteHeader(http.StatusNotFound)
+// 	}
+// }
 
 func (h *linkHandler) Short(w http.ResponseWriter, req *http.Request) {
 	originalURL, err := getURLFromBody(req.Body)
@@ -77,7 +77,7 @@ func getURLFromBody(body io.Reader) (string, error) {
 	if urlText == "" {
 		return "", fmt.Errorf("failed to get url: empty body")
 	}
-	if !govalidator.IsURL(urlText) {
+	if !govalidator.IsRequestURL(urlText) || !govalidator.IsURL(urlText) {
 		return "", fmt.Errorf("failed to get url: bad format")
 	}
 	return urlText, nil
