@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"strings"
 
 	"github.com/AscaroLabs/go-musthave-shortener/internal/app/domain"
 	"github.com/AscaroLabs/go-musthave-shortener/internal/app/services/link"
+	"github.com/asaskevich/govalidator"
 )
 
 type linkHandler struct {
@@ -74,16 +74,19 @@ func getURLFromBody(body io.Reader) (string, error) {
 	}
 	urlText := string(bodyBytes)
 	// Валидация
-	if _, err := url.Parse(urlText); err != nil {
-		return "", fmt.Errorf("failed to get url: %w", err)
+	if urlText == "" {
+		return "", fmt.Errorf("failed to get url: empty body")
+	}
+	if !govalidator.IsURL(urlText) {
+		return "", fmt.Errorf("failed to get url: bad format")
 	}
 	return urlText, nil
 }
 
 func writeShortResponse(res domain.ShortResponse, w http.ResponseWriter) {
+	w.Header().Add("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(res.ShortURL))
-	w.Header().Add("Content-Type", "text/plain")
 }
 
 func writeRedirectOriginalResponse(res domain.GetOriginalResponse, w http.ResponseWriter) {
