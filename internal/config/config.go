@@ -55,6 +55,9 @@ func getValues(values []value) {
 		var ok bool
 		if *v.p, ok = os.LookupEnv(v.envName); !ok {
 			flag.StringVar(v.p, v.flagName, v.defaultValue, v.usage)
+		} else {
+			var a string
+			flag.StringVar(&a, v.flagName, v.defaultValue, v.usage)
 		}
 	}
 	flag.Parse()
