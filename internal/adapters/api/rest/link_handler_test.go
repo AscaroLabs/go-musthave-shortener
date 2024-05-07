@@ -1,6 +1,7 @@
 package rest_test
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -20,6 +21,10 @@ var mIDURL = map[string]string{}
 var h = rest.NewLinkHandler()
 
 func TestLinkHandlerLink(t *testing.T) {
+	if !flag.Parsed() {
+		flag.Parse()
+	}
+
 	t.Run("Test Short", testLinkHandlerShort)
 
 	t.Run("Test RedirectOriginal", testLinkHandlerRedirectOriginal)
@@ -44,8 +49,7 @@ func testLinkHandlerShort(t *testing.T) {
 				code:        http.StatusCreated,
 				contentType: "text/plain",
 				response: regexp.MustCompile(
-					config.NetProtocol + "://" +
-						config.HTTPHost + config.HTTPPort +
+					*config.Base +
 						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.IDLength)),
 				saveResult: true,
 			},
@@ -57,8 +61,7 @@ func testLinkHandlerShort(t *testing.T) {
 				code:        http.StatusCreated,
 				contentType: "text/plain",
 				response: regexp.MustCompile(
-					config.NetProtocol + "://" +
-						config.HTTPHost + config.HTTPPort +
+					*config.Base +
 						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.IDLength)),
 				saveResult: true,
 			},
@@ -70,8 +73,7 @@ func testLinkHandlerShort(t *testing.T) {
 				code:        http.StatusCreated,
 				contentType: "text/plain",
 				response: regexp.MustCompile(
-					config.NetProtocol + "://" +
-						config.HTTPHost + config.HTTPPort +
+					*config.Base +
 						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.IDLength)),
 				saveResult: true,
 			},
