@@ -48,8 +48,8 @@ func (ls *LinkService) GetOriginal(req domain.GetOriginalRequest) (*domain.GetOr
 }
 
 func urlByID(id string) string {
-	return *config.Base + "/" + id
+	return config.Config.Base + "/" + id
 }
 func generateID() string {
-	return utils.RandomString(config.IDLength)
+	return utils.RandomString(config.Config.IDLength)
 }

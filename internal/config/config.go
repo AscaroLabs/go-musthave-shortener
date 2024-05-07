@@ -1,12 +1,61 @@
 package config
 
-import "flag"
+import (
+	"flag"
+	"os"
+)
 
-const NetProtocol = "http"
+var initialized = false
 
-// const HTTPHost = "127.0.0.1"
-// const HTTPPort = ":8080"
-const IDLength = 8
+func Initialized() bool {
+	return initialized
+}
 
-var Addr = flag.String("a", "127.0.0.1:8080", "адрес запуска HTTP-сервера")
-var Base = flag.String("b", "http://127.0.0.1:8080", "базовый адрес результирующего сокращённого URL")
+var Config = struct {
+	Addr     string
+	Base     string
+	IDLength int
+}{
+	// не передаваемые параметры
+	IDLength: 8,
+}
+
+func Init() {
+	getValues(
+		[]value{
+			{
+				&Config.Addr,
+				"SERVER_ADDRESS",
+				"a",
+				"127.0.0.1:8080",
+				"адрес запуска HTTP-сервера",
+			},
+			{
+				&Config.Base,
+				"BASE_URL",
+				"b",
+				"http://127.0.0.1:8080",
+				"базовый адрес результирующего сокращённого URL",
+			},
+		},
+	)
+	initialized = true
+}
+
+type value struct {
+	p            *string
+	envName      string
+	flagName     string
+	defaultValue string
+	usage        string
+}
+
+func getValues(values []value) {
+	for _, v := range values {
+		var ok bool
+		if *v.p, ok = os.LookupEnv(v.envName); !ok {
+			flag.StringVar(v.p, v.flagName, v.defaultValue, v.usage)
+		}
+	}
+	flag.Parse()
+}

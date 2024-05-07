@@ -1,7 +1,6 @@
 package rest_test
 
 import (
-	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -21,8 +20,8 @@ var mIDURL = map[string]string{}
 var h = rest.NewLinkHandler()
 
 func TestLinkHandlerLink(t *testing.T) {
-	if !flag.Parsed() {
-		flag.Parse()
+	if !config.Initialized() {
+		config.Init()
 	}
 
 	t.Run("Test Short", testLinkHandlerShort)
@@ -49,8 +48,8 @@ func testLinkHandlerShort(t *testing.T) {
 				code:        http.StatusCreated,
 				contentType: "text/plain",
 				response: regexp.MustCompile(
-					*config.Base +
-						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.IDLength)),
+					config.Config.Base +
+						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.Config.IDLength)),
 				saveResult: true,
 			},
 		},
@@ -61,8 +60,8 @@ func testLinkHandlerShort(t *testing.T) {
 				code:        http.StatusCreated,
 				contentType: "text/plain",
 				response: regexp.MustCompile(
-					*config.Base +
-						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.IDLength)),
+					config.Config.Base +
+						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.Config.IDLength)),
 				saveResult: true,
 			},
 		},
@@ -73,8 +72,8 @@ func testLinkHandlerShort(t *testing.T) {
 				code:        http.StatusCreated,
 				contentType: "text/plain",
 				response: regexp.MustCompile(
-					*config.Base +
-						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.IDLength)),
+					config.Config.Base +
+						fmt.Sprintf("/[a-zA-Z0-9]{%d}", config.Config.IDLength)),
 				saveResult: true,
 			},
 		},
